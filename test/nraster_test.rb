@@ -8,5 +8,3 @@ class NRasterTest < Test::Unit::TestCase
     assert(true)
   end
 end
-
-Test::Unit::UI::Console::TestRunner.run(NRasterTest)

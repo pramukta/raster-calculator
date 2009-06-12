@@ -96,7 +96,7 @@ Valid Ranges: #{1..(@computed_chunks.shape[0])}, #{1..(@computed_chunks.shape[1]
       r2 = (r2.first + delta)..(r2.last - delta)
       r = NArray.float(2*@chunk_size, 2*@chunk_size)
       r[(@chunk_size/2)..(2*@chunk_size - @chunk_size/2 - 1), (@chunk_size/2)..(2*@chunk_size - @chunk_size/2 - 1)] = @raster[r1, r2]
-      r
+      return r
     end
     
     def chunk_ranges(x, y)
