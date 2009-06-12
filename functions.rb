@@ -1,11 +1,14 @@
-requir  'nraster'
-require 'convolver'
+require  File.expand_path(File.dirname(__FILE__) + '/nraster')
+require  File.expand_path(File.dirname(__FILE__) + '/convolver')
+
 module Pixelate
   module Functions
-    FUNCTIONS = [:gaussian, :convolve]
+    def functions
+       [:gaussian, :convolve]
+    end
     def convolve(raster, kernel)
       c = Convolver.new(raster, kernel, 256)
-      c.convolve
+      Pixelate::Raster.from_narray(c.convolve)
     end
     
     def gaussian(radius)

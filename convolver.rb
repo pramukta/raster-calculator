@@ -7,6 +7,7 @@ module Pixelate
     attr_reader :chunk_size
     attr_reader :result
     def initialize(raster, kernel, chunk_size=256)
+      @width, @height = raster.shape
       # protect the method from some forms of invalid input
       if(kernel.shape[0] > chunk_size || kernel.shape[1] > chunk_size)
         raise ArgumentError, %Q{Kernel cannot be larger than the Chunk Size
@@ -78,8 +79,8 @@ Valid Ranges: #{1..(@computed_chunks.shape[0])}, #{1..(@computed_chunks.shape[1]
       
       delta = (@chunk_size) / 2
       
-      @result[(r1.first + delta)..(r3.last - delta), 
-        (r2.first + delta)..(r4.last - delta)]
+      @result[(r1.first + delta)..([r3.last - delta, @width - 1].min), 
+        (r2.first + delta)..([r4.last - delta, @height - 1].min)]
     end
   
     private

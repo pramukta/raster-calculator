@@ -1,18 +1,20 @@
-require 'nraster'
+require  File.expand_path(File.dirname(__FILE__) + '/nraster')
 module Pixelate
-  module Functions
-    OPERATORS = [:+, :-, :*, :/, '^'.to_sym]
+  module Operations
+    def operators
+      [:+, :-, :*, :/, '^'.to_sym]
+    end
     def +(a,b)
-      NRaster.from_narray(a + b)
+      Pixelate::Raster.from_narray(a.buffer + b.buffer)
     end
     def -(a,b)
-      NRaster.from_narray(a - b)
+      Pixelate::Raster.from_narray(a.buffer - b.buffer)
     end
     def *(a,b)
-      NRaster.from_narray(a * b)
+      Pixelate::Raster.from_narray(a.buffer * b.buffer)
     end
     def /(a,b)
-      NRaster.from_narray(a / b)
+      Pixelate::Raster.from_narray(a.buffer / b.buffer)
     end
   end
 end
