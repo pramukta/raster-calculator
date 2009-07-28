@@ -12,46 +12,55 @@ require 'rubygems'
 require 'rmagick'
 require 'narray'
 
+# :nodoc:
 module Pixelate
-  
+  # Basic wrapper data type class for holding raster data.  Base data type is assumed to be a
+  # 32-bit floating point number.  Constructors automatically converts all input data to that
+  # type.
   class Raster < DelegateClass(NArray)
     attr_accessor :buffer
+    # allocate a new raster filled with zeros of a specified width and height
     def initialize(width, height)
       super(@buffer = NArray.float(width, height))
     end
-    
+    # allocate a raster by copying data from an existing NArray
     def self.from_narray(data)
       raster = Raster.new(data.shape[0], data.shape[1])
       raster.buffer[0..(data.shape[0]-1), 0..(data.shape[1]-1)] = data
       return raster
     end
-    
+    # return the width of the raster, which is defined to be the size of the backing
+    # NArray's first dimension.  
     def width; self.shape[0]; end
+    # return the height of the raster, which is defined to be the size of the backing
+    # NArray's second dimension.  
     def height; self.shape[1]; end
-            
+    # get a specified pixel value        
     def get(x,y)
       self[x.floor,y.floor]
     end
-    
+    # set a specified pixel value
     def set(x,y,z)
       # puts "#{x}, #{y}, #{self.width}, #{self.height}"
       self[x.floor,y.floor] = z
     end
-    
+    # caching raster minimum method
     def minimum
       @min ||= self.min
     end
-    
+    # caching raster maximum method    
     def maximum
       @max ||= self.max
     end
-    
+    # recomputes the cached minimum and maximum values
     def recalc_min_and_max
       @min = self.min
       @max = self.max
       [@min, @max]
     end
-    
+    # convert the raster to an RMagick Image by mapping pixel values to 
+    # a specified colormap.  Both the colormap and the pixel range are
+    # optional arguments that can be specified.    
     def to_image(colormap=DEFAULT_COLORMAP, range=self.recalc_min_and_max)
       min, max = range
       tmp = self.reshape(self.width*self.height)
