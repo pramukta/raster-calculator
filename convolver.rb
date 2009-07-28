@@ -8,11 +8,16 @@
 require 'fftw3'
 
 module Pixelate
+  # A class that implements an overlap-add fft based convolution method.  The input
+  # data and parameters are provided in the constructor and the instance can persist.
+  # this allows partial areas to be computed and the instance can be kept around in
+  # order to implement tiling.
   class Convolver
     attr_reader :raster
     attr_reader :kernel
     attr_reader :chunk_size
     attr_reader :result
+
     def initialize(raster, kernel, chunk_size=256)
       @width, @height = raster.shape
       # protect the method from some forms of invalid input

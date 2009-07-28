@@ -8,16 +8,21 @@
 require  File.expand_path(File.dirname(__FILE__) + '/nraster')
 require  File.expand_path(File.dirname(__FILE__) + '/convolver')
 
+# :nodoc:
 module Pixelate
+  # Support module for mixing into an expression-parse interpreter
   module Functions
+    # a list of available function symbols
     def functions
        [:gaussian, :convolve]
     end
+    # convolution entry point
     def convolve(raster, kernel)
       c = Convolver.new(raster, kernel, 256)
       Pixelate::Raster.from_narray(c.convolve)
     end
-    
+    # generate a gaussian kernel where the specified radius refers to the 
+    # standard deviation of the distribution
     def gaussian(radius)
       g = NArray.float(2*radius+1, 2*radius+1)
       for i in 0..(g.shape[0]-1)
