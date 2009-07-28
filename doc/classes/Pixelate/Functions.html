@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Pixelate::Functions</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Pixelate::Functions</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/functions_rb.html">
+                functions.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Support module for mixing into an expression-parse interpreter
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000013">convolve</a>&nbsp;&nbsp;
+      <a href="#M000012">functions</a>&nbsp;&nbsp;
+      <a href="#M000014">gaussian</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="#M000013" class="method-signature">
+          <span class="method-name">convolve</span><span class="method-args">(raster, kernel)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+convolution entry point
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000013-source">
+<pre>
+<span class="ruby-comment cmt"># File functions.rb, line 20</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convolve</span>(<span class="ruby-identifier">raster</span>, <span class="ruby-identifier">kernel</span>)
+      <span class="ruby-identifier">c</span> = <span class="ruby-constant">Convolver</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">raster</span>, <span class="ruby-identifier">kernel</span>, <span class="ruby-value">256</span>)
+      <span class="ruby-constant">Pixelate</span><span class="ruby-operator">::</span><span class="ruby-constant">Raster</span>.<span class="ruby-identifier">from_narray</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">convolve</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="#M000012" class="method-signature">
+          <span class="method-name">functions</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+a list of available function symbols
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000012-source">
+<pre>
+<span class="ruby-comment cmt"># File functions.rb, line 16</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">functions</span>
+       [<span class="ruby-identifier">:gaussian</span>, <span class="ruby-identifier">:convolve</span>]
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="#M000014" class="method-signature">
+          <span class="method-name">gaussian</span><span class="method-args">(radius)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+generate a <a href="Functions.html#M000014">gaussian</a> kernel where the
+specified radius refers to the standard deviation of the distribution
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
+<pre>
+<span class="ruby-comment cmt"># File functions.rb, line 26</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gaussian</span>(<span class="ruby-identifier">radius</span>)
+      <span class="ruby-identifier">g</span> = <span class="ruby-constant">NArray</span>.<span class="ruby-identifier">float</span>(<span class="ruby-value">2</span><span class="ruby-operator">*</span><span class="ruby-identifier">radius</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>, <span class="ruby-value">2</span><span class="ruby-operator">*</span><span class="ruby-identifier">radius</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
+      <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">i</span> <span class="ruby-keyword kw">in</span> <span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">g</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+        <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">j</span> <span class="ruby-keyword kw">in</span> <span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">g</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+          <span class="ruby-identifier">r</span> = ((<span class="ruby-identifier">i</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">radius</span>)<span class="ruby-operator">**</span><span class="ruby-value">2</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">j</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">radius</span>)<span class="ruby-operator">**</span><span class="ruby-value">2</span>).<span class="ruby-identifier">to_f</span>
+          <span class="ruby-identifier">g</span>[<span class="ruby-identifier">i</span>,<span class="ruby-identifier">j</span>] = (<span class="ruby-value">1.0</span><span class="ruby-operator">/</span>(<span class="ruby-value">2</span><span class="ruby-operator">*</span><span class="ruby-identifier">radius</span><span class="ruby-operator">*</span><span class="ruby-constant">Math</span>.<span class="ruby-identifier">sqrt</span>(<span class="ruby-value">2</span><span class="ruby-operator">*</span><span class="ruby-value">3.141592654</span>)))<span class="ruby-operator">*</span><span class="ruby-constant">Math</span>.<span class="ruby-identifier">exp</span>(<span class="ruby-value">-1</span><span class="ruby-operator">*</span>(<span class="ruby-identifier">r</span><span class="ruby-operator">/</span>(<span class="ruby-value">2</span><span class="ruby-operator">*</span>(<span class="ruby-identifier">radius</span>)))<span class="ruby-operator">**</span><span class="ruby-value">2</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">g</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Pixelate::Convolver</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Pixelate::Convolver</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/convolver_rb.html">
+                convolver.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+A class that implements an overlap-add fft based convolution method. The
+input data and parameters are provided in the constructor and the instance
+can persist. this allows partial areas to be computed and the instance can
+be kept around in order to implement tiling.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000028">convolve</a>&nbsp;&nbsp;
+      <a href="#M000027">new</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">chunk_size</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">kernel</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">raster</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">result</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000027" class="method-detail">
+        <a name="M000027"></a>
+
+        <div class="method-heading">
+          <a href="#M000027" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(raster, kernel, chunk_size=256)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000027-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000027-source">
+<pre>
+<span class="ruby-comment cmt"># File convolver.rb, line 21</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">raster</span>, <span class="ruby-identifier">kernel</span>, <span class="ruby-identifier">chunk_size</span>=<span class="ruby-value">256</span>)
+      <span class="ruby-ivar">@width</span>, <span class="ruby-ivar">@height</span> = <span class="ruby-identifier">raster</span>.<span class="ruby-identifier">shape</span>
+      <span class="ruby-comment cmt"># protect the method from some forms of invalid input</span>
+      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">kernel</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">chunk_size</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">kernel</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">chunk_size</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">%Q{Kernel cannot be larger than the Chunk Size
+Kernel Size: #{kernel.shape[0]} x #{kernel.shape[1]}
+Chunk Size: #{chunk_size}
+}</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">kernel</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">raster</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">kernel</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">raster</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>])
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">%Q{Kernel cannot be larger than the Raster
+Kernel Size: #{kernel.shape[0]} x #{kernel.shape[1]}
+Raster Size: #{raster.shape[0]} x #{raster.shape[1]}
+}</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">raster</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Raster</span>))
+        <span class="ruby-identifier">raster</span> = <span class="ruby-identifier">raster</span>.<span class="ruby-identifier">buffer</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">raster</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">NArray</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">raster</span>.<span class="ruby-identifier">shape</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">%Q{Input Raster doesn't seem right.  Check to make sure that it is a 2-D NArray (or Pixelate::Raster)}</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># end input protection section</span>
+        
+      <span class="ruby-ivar">@chunk_size</span> = <span class="ruby-identifier">chunk_size</span>      
+      <span class="ruby-ivar">@raster</span> = <span class="ruby-identifier">zero_pad_raster</span>(<span class="ruby-identifier">raster</span>, <span class="ruby-identifier">chunk_size</span>)
+      <span class="ruby-ivar">@kernel</span> = <span class="ruby-identifier">zero_pad_kernel</span>(<span class="ruby-identifier">kernel</span>, <span class="ruby-identifier">chunk_size</span>)
+      <span class="ruby-ivar">@result</span> = <span class="ruby-constant">NArray</span>.<span class="ruby-identifier">float</span>(<span class="ruby-operator">*</span><span class="ruby-ivar">@raster</span>.<span class="ruby-identifier">shape</span>)
+      <span class="ruby-identifier">width</span>, <span class="ruby-identifier">height</span> = <span class="ruby-ivar">@raster</span>.<span class="ruby-identifier">shape</span>
+      <span class="ruby-ivar">@computed_chunks</span> = <span class="ruby-constant">NArray</span>.<span class="ruby-identifier">byte</span>(<span class="ruby-identifier">width</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">chunk_size</span>, 
+                                     <span class="ruby-identifier">height</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">chunk_size</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000028" class="method-detail">
+        <a name="M000028"></a>
+
+        <div class="method-heading">
+          <a href="#M000028" class="method-signature">
+          <span class="method-name">convolve</span><span class="method-args">(xrange=(1..(@computed_chunks.shape[0] - 1)), yrange=(1..(@computed_chunks.shape[1] - 1)) )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000028-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000028-source">
+<pre>
+<span class="ruby-comment cmt"># File convolver.rb, line 53</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convolve</span>(<span class="ruby-identifier">xrange</span>=(<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)), 
+                 <span class="ruby-identifier">yrange</span>=(<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) )
+      <span class="ruby-comment cmt"># protect the method from some forms of invalid input</span>
+      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Numeric</span>))
+        <span class="ruby-identifier">xrange</span> = <span class="ruby-identifier">xrange</span><span class="ruby-operator">..</span><span class="ruby-identifier">xrange</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Numeric</span>))
+        <span class="ruby-identifier">yrange</span> = <span class="ruby-identifier">yrange</span><span class="ruby-operator">..</span><span class="ruby-identifier">yrange</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">unless</span>( (<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>])).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">first</span>) <span class="ruby-operator">&amp;&amp;</span>
+          (<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">0</span>])).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">last</span>) <span class="ruby-operator">&amp;&amp;</span>
+          (<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>])).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">first</span>) <span class="ruby-operator">&amp;&amp;</span>
+          (<span class="ruby-value">1</span><span class="ruby-operator">..</span>(<span class="ruby-ivar">@computed_chunks</span>.<span class="ruby-identifier">shape</span>[<span class="ruby-value">1</span>])).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">last</span>) )
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">IndexError</span>, <span class="ruby-node">%Q{Ranges are out of bounds
+Selected Ranges: #{xrange}, #{yrange}
+Valid Ranges: #{1..(@computed_chunks.shape[0])}, #{1..(@computed_chunks.shape[1])}
+}</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># end protection section</span>
+      <span class="ruby-identifier">width</span>, <span class="ruby-identifier">height</span> = <span class="ruby-ivar">@raster</span>.<span class="ruby-identifier">shape</span>
+      <span class="ruby-identifier">kernel_fft</span> = <span class="ruby-constant">FFTW3</span>.<span class="ruby-identifier">dft</span>(<span class="ruby-ivar">@kernel</span>, <span class="ruby-value">-1</span>)
+      <span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span>(<span class="ruby-ivar">@computed_chunks</span>[<span class="ruby-identifier">x</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value">0</span>)
+            <span class="ruby-identifier">chunk</span> = <span class="ruby-identifier">working_chunk</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>)
+            <span class="ruby-identifier">chunk_fft</span> = <span class="ruby-constant">FFTW3</span>.<span class="ruby-identifier">dft</span>(<span class="ruby-identifier">chunk</span>, <span class="ruby-value">-1</span>)
+            <span class="ruby-identifier">result_chunk</span> = <span class="ruby-identifier">swap_quadrants</span>(<span class="ruby-constant">FFTW3</span>.<span class="ruby-identifier">dft</span>(<span class="ruby-identifier">kernel_fft</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">chunk_fft</span>, <span class="ruby-value">1</span>) <span class="ruby-operator">/</span> (<span class="ruby-ivar">@chunk_size</span> <span class="ruby-operator">*</span> <span class="ruby-ivar">@chunk_size</span> <span class="ruby-operator">*</span> <span class="ruby-value">4</span>).<span class="ruby-identifier">to_f</span>)
+            <span class="ruby-identifier">accumulate_result_chunk</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>, <span class="ruby-identifier">result_chunk</span>.<span class="ruby-identifier">real</span>)
+            <span class="ruby-comment cmt"># image = Pixelate::Raster.from_narray(chunk).to_image</span>
+            <span class="ruby-comment cmt"># image.write(&quot;#{x}_#{y}.png&quot;)</span>
+            <span class="ruby-ivar">@computed_chunks</span>[<span class="ruby-identifier">x</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">y</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>] = <span class="ruby-value">1</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># return a cropped out section of the result raster</span>
+      <span class="ruby-comment cmt"># need this to work for sub ranges too</span>
+      <span class="ruby-identifier">r1</span>, <span class="ruby-identifier">r2</span> = <span class="ruby-identifier">chunk_ranges</span>(<span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">first</span>, <span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">first</span>)
+      <span class="ruby-identifier">r3</span>, <span class="ruby-identifier">r4</span> = <span class="ruby-identifier">chunk_ranges</span>(<span class="ruby-identifier">xrange</span>.<span class="ruby-identifier">last</span>, <span class="ruby-identifier">yrange</span>.<span class="ruby-identifier">last</span>)
+      
+      <span class="ruby-identifier">delta</span> = (<span class="ruby-ivar">@chunk_size</span>) <span class="ruby-operator">/</span> <span class="ruby-value">2</span>
+      
+      <span class="ruby-ivar">@result</span>[(<span class="ruby-identifier">r1</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">delta</span>)<span class="ruby-operator">..</span>([<span class="ruby-identifier">r3</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">delta</span>, <span class="ruby-identifier">r1</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">delta</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@width</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>].<span class="ruby-identifier">min</span>), 
+        (<span class="ruby-identifier">r2</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">delta</span>)<span class="ruby-operator">..</span>([<span class="ruby-identifier">r4</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">delta</span>, <span class="ruby-identifier">r2</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">delta</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@height</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>].<span class="ruby-identifier">min</span>)]
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
