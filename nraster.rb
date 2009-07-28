@@ -1,3 +1,10 @@
+# NArray-based raster processing library for use with the expression-parser
+# library.  
+#
+# Author:: Pramukta Kumar (mailto: prak@mac.com)
+# Copyright:: Pramukta Kumar
+# License:: MIT Public License
+#
 require 'delegate'
 
 require 'rubygems'
@@ -6,6 +13,7 @@ require 'rmagick'
 require 'narray'
 
 module Pixelate
+  
   class Raster < DelegateClass(NArray)
     attr_accessor :buffer
     def initialize(width, height)

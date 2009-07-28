@@ -1,3 +1,10 @@
+# NArray-based raster processing library for use with the expression-parser
+# library.  
+#
+# Author:: Pramukta Kumar (mailto: prak@mac.com)
+# Copyright:: Pramukta Kumar
+# License:: MIT Public License
+#
 require  File.expand_path(File.dirname(__FILE__) + '/nraster')
 require  File.expand_path(File.dirname(__FILE__) + '/convolver')
 
