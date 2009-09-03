@@ -12,34 +12,70 @@ module Pixelate
       [:+, :-, :*, :/, '^'.to_sym, :>, :<, :>=, :<=, 'eq'.to_sym, 'ne'.to_sym]
     end
     def +(a,b)
-      Pixelate::Raster.from_narray(a.buffer + b.buffer)
+      Pixelate::Raster.from_narray(a + b)
     end
     def -(a,b)
-      Pixelate::Raster.from_narray(a.buffer - b.buffer)
+      Pixelate::Raster.from_narray(a - b)
     end
     def *(a,b)
-      Pixelate::Raster.from_narray(a.buffer * b.buffer)
+      Pixelate::Raster.from_narray(a * b)
     end
     def /(a,b)
-      Pixelate::Raster.from_narray(a.buffer / b.buffer)
+      Pixelate::Raster.from_narray(a / b)
     end
     def >(a,b)
-      Pixelate::Raster.from_narray(a.gt(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.gt(b))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.lt(a))
+      else
+        (a > b) ? 1 : 0
+      end
     end
     def >=(a,b)
-      Pixelate::Raster.from_narray(a.ge(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.gte(b))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.lte(a))
+      else
+        (a >= b) ? 1 : 0
+      end
     end
     def <(a,b)
-      Pixelate::Raster.from_narray(a.lt(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.lt(b))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.gt(a))
+      else
+        (a < b) ? 1 : 0
+      end
     end
     def <=(a,b)
-      Pixelate::Raster.from_narray(a.le(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.lte(b))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.gte(a))
+      else
+        (a <= b) ? 1 : 0
+      end
     end
     def eq(a,b)      
-      Pixelate::Raster.from_narray(a.eq(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.eq(b.to_f))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.eq(a.to_f))
+      else
+        (a == b) ? 1 : 0
+      end
     end
     def ne(a,b)
-      Pixelate::Raster.from_narray(a.ne(b))
+      if(a.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(a.ne(b.to_f))
+      elsif(b.is_a?(Pixelate::Raster))
+        Pixelate::Raster.from_narray(b.ne(a.to_f))
+      else
+        (a != b) ? 1 : 0
+      end
     end
   end
 end
