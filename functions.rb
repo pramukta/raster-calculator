@@ -14,7 +14,7 @@ module Pixelate
   module Functions
     # a list of available function symbols
     def functions
-       [:gaussian, :convolve]
+       [:gaussian, :convolve, :sobelx, :sobely]
     end
     # convolution entry point
     def convolve(raster, kernel)
@@ -32,6 +32,18 @@ module Pixelate
         end
       end
       g
+    end
+    # generate a Sobel X Gradient Kernel which can be used for edge detection
+    def sobelx
+      g = NArray.to_na([[-1 0 1],
+                        [-2 0 2],
+                        [-1 0 1]]).to_f;
+    end
+    # generate a Sobel Y Gradient Kernel which can be used for edge detection
+    def sobelx
+      g = NArray.to_na([[1 2 1],
+                        [0 0 0],
+                        [-1 -2 -1]]).to_f;
     end
   end
 end
