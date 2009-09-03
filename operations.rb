@@ -12,49 +12,49 @@ module Pixelate
       [:+, :-, :*, :/, '^'.to_sym, :>, :<, :>=, :<=, 'eq'.to_sym, 'ne'.to_sym]
     end
     def +(a,b)
-      Pixelate::Raster.from_narray(a + b)
+      Pixelate::Raster.from_narray(a.to_f + b.to_f)
     end
     def -(a,b)
-      Pixelate::Raster.from_narray(a - b)
+      Pixelate::Raster.from_narray(a.to_f - b.to_f)
     end
     def *(a,b)
-      Pixelate::Raster.from_narray(a * b)
+      Pixelate::Raster.from_narray(a.to_f * b.to_f)
     end
     def /(a,b)
-      Pixelate::Raster.from_narray(a / b)
+      Pixelate::Raster.from_narray(a.to_f / b.to_f)
     end
     def >(a,b)
       if(a.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(a.gt(b))
+        Pixelate::Raster.from_narray(a.gt(b.to_f))
       elsif(b.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(b.lt(a))
+        Pixelate::Raster.from_narray(b.lt(a.to_f))
       else
         (a > b) ? 1 : 0
       end
     end
     def >=(a,b)
       if(a.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(a.gte(b))
+        Pixelate::Raster.from_narray(a.ge(b.to_f))
       elsif(b.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(b.lte(a))
+        Pixelate::Raster.from_narray(b.le(a.to_f))
       else
         (a >= b) ? 1 : 0
       end
     end
     def <(a,b)
       if(a.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(a.lt(b))
+        Pixelate::Raster.from_narray(a.lt(b.to_f))
       elsif(b.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(b.gt(a))
+        Pixelate::Raster.from_narray(b.gt(a.to_f))
       else
         (a < b) ? 1 : 0
       end
     end
     def <=(a,b)
       if(a.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(a.lte(b))
+        Pixelate::Raster.from_narray(a.le(b.to_f))
       elsif(b.is_a?(Pixelate::Raster))
-        Pixelate::Raster.from_narray(b.gte(a))
+        Pixelate::Raster.from_narray(b.ge(a.to_f))
       else
         (a <= b) ? 1 : 0
       end
