@@ -11,11 +11,13 @@ require  File.expand_path(File.dirname(__FILE__) + '/convolver')
 # :nodoc:
 module Pixelate
   # Support module for mixing into an expression-parse interpreter
-  module Functions
+  module FunctionTokens
     # a list of available function symbols
     def functions
-       [:gaussian, :convolve, :sobelx, :sobely]
+       [:gaussian, :convolve]
     end
+  end
+  module Functions
     # convolution entry point
     def convolve(raster, kernel)
       c = Convolver.new(raster, kernel, 256)
@@ -33,17 +35,17 @@ module Pixelate
       end
       g
     end
-    # generate a Sobel X Gradient Kernel which can be used for edge detection
-    def sobelx
-      g = NArray.to_na([[1, 0, -1],
-                        [2, 0, -2],
-                        [1, 0, -1]]).to_f;
-    end
-    # generate a Sobel Y Gradient Kernel which can be used for edge detection
-    def sobely
-      g = NArray.to_na([[1,   2,  1],
-                        [0,   0,  0],
-                        [-1, -2, -1]]).to_f;
-    end
+    # # generate a Sobel X Gradient Kernel which can be used for edge detection
+    # def sobelx
+    #   g = NArray.to_na([[1, 0, -1],
+    #                     [2, 0, -2],
+    #                     [1, 0, -1]]).to_f;
+    # end
+    # # generate a Sobel Y Gradient Kernel which can be used for edge detection
+    # def sobely
+    #   g = NArray.to_na([[1,   2,  1],
+    #                     [0,   0,  0],
+    #                     [-1, -2, -1]]).to_f;
+    # end
   end
 end
