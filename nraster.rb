@@ -9,7 +9,7 @@ require 'delegate'
 
 require 'rubygems'
 
-require 'rmagick'
+require 'RMagick'
 require 'narray'
 
 # :nodoc:
