@@ -5,6 +5,7 @@
 # Copyright:: Pramukta Kumar
 # License:: MIT Public License
 #
+require 'rubygems'
 require 'fftw3'
 
 module Pixelate
@@ -70,13 +71,13 @@ Valid Ranges: #{1..(@computed_chunks.shape[0])}, #{1..(@computed_chunks.shape[1]
       end
       # end protection section
       width, height = @raster.shape
-      kernel_fft = FFTW3.dft(@kernel, -1)
+      kernel_fft = FFTW3.fft(@kernel)
       xrange.each do |x|
         yrange.each do |y|
           if(@computed_chunks[x-1, y-1] == 0)
             chunk = working_chunk(x, y)
-            chunk_fft = FFTW3.dft(chunk, -1)
-            result_chunk = swap_quadrants(FFTW3.dft(kernel_fft * chunk_fft, 1) / (@chunk_size * @chunk_size * 4).to_f)
+            chunk_fft = FFTW3.fft(chunk)
+            result_chunk = swap_quadrants(FFTW3.ifft(kernel_fft * chunk_fft) / (@chunk_size * @chunk_size * 4).to_f)
             accumulate_result_chunk(x, y, result_chunk.real)
             # image = Pixelate::Raster.from_narray(chunk).to_image
             # image.write("#{x}_#{y}.png")
